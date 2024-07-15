@@ -1,5 +1,53 @@
 from mcdreforged.api.all import *
 
+from typing import Optional
+from mirror_archive_manager.config.config import Config, set_config_instance
+from mirror_archive_manager import globals
+from mirror_archive_manager.command.mam_command import CommandManager
+
+config: Optional[Config] = None
+_has_loaded = False
+
+globals.load()
+
+
+def is_leader() -> bool:
+    return config.leader
+
 
 def on_load(server: PluginServerInterface, old):
-    server.logger.info("hello")
+    global config, _has_loaded
+    try:
+        config = server.load_config_simple(target_class=Config, failure_policy='raise')
+        set_config_instance(config)
+        if is_leader():
+            server.logger.info(f'MAM running with main role!')
+            start_main(server)
+        else:
+            server.logger.info(f'MAM running with mirror role!')
+            start_mirror(server)
+
+    except Exception:
+        server.logger.error(f'{server.get_self_metadata().name} initialization failed!')
+        on_unload(server)
+        raise
+    else:
+        _has_loaded = True
+        server.logger.info(f'{server.get_self_metadata().name} initialization completed!')
+        return
+
+
+def on_unload(server: PluginServerInterface):
+    server.logger.warning(f'{server.get_self_metadata().name} unloaded!')
+
+
+def start_main(server: PluginServerInterface):
+    if len(config.mirrors) == 0:
+        server.logger.warning('mirror server not found! MAM has been disabled!')
+        globals.disable = True
+    # register commands
+    CommandManager(server).register_commands()
+
+
+def start_mirror(server: PluginServerInterface):
+    server.logger.info('mirror process...')
