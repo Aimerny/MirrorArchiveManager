@@ -1,0 +1,9 @@
+mirror_archive_manager:
+  help:
+    unknown_help: '无指令帮助 --> {}'
+    start_help: '{} -- 启动镜像服 <server_name>'
+    stop_help: '{} -- 停止镜像服 <server_name>'
+    sync_help: '{} -- 将 prime_backup 中的编号[<id>]的存档同步到<server_name>'
+    info_help: '{} -- 获取镜像服<server_name>的简单信息'
+    help_header: '========== Mirror Archive Manager =========='
+    help_footer: '================ by Aimerny ================'

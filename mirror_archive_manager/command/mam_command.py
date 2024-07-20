@@ -1,7 +1,9 @@
+from typing import Optional
+
 from mcdreforged.api.all import *
 
 from mirror_archive_manager.config.config import Config
-from mirror_archive_manager.util.mcdr_util import reply_message
+from mirror_archive_manager.util.mcdr_util import reply_message, tr
 from mirror_archive_manager.globals import disable
 
 COMMAND_HELP_LIST = ['start', 'stop', 'sync', 'info']
@@ -13,7 +15,22 @@ class CommandManager:
         self.config = Config.get()
 
     def cmd_help(self, source: CommandSource, context: dict):
-        reply_message(source, "help")
+        what = context.get('what')
+        if what is not None and what not in COMMAND_HELP_LIST:
+            reply_message(source, tr('help.unknown_help', RText(f'!!mam {what}', RColor.red)))
+            return
+        else:
+            self.help_process(source, what)
+
+    @classmethod
+    def help_process(cls, source: CommandSource, what: Optional[str]):
+        reply_message(source, tr('help.help_header'))
+        if what is None:
+            reply_message(source, tr('help.start_help', RText(f'!!mam start <server_name>', RColor.gray)))
+            reply_message(source, tr('help.stop_help', RText(f'!!mam stop <server_name>', RColor.gray)))
+            reply_message(source, tr('help.sync_help', RText(f'!!mam sync <server_name> <id>', RColor.gray)))
+            reply_message(source, tr('help.info_help', RText(f'!!mam info <server_name>', RColor.gray)))
+        reply_message(source, tr('help.help_footer'))
 
     def register_commands(self):
         builder = SimpleCommandBuilder()

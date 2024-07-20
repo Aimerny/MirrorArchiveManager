@@ -14,5 +14,6 @@
         "mcdreforged": ">=2.12.0",
         "prime_backup": ">=1.7.4"
     },
-    "entrypoint": "mirror_archive_manager.entrance"
+    "entrypoint": "mirror_archive_manager.entrance",
+    "resources": ["lang", "LICENSE"]
 }

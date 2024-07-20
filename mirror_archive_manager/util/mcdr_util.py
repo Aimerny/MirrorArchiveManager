@@ -6,3 +6,8 @@ def reply_message(source: CommandSource, msg: Union[str, RTextBase], *, with_pre
     if with_prefix:
         msg = RTextList(RTextList(RText('[MAM]', RColor.dark_aqua).h('Mirror Archive Manager'), ' '), msg)
     source.reply(msg)
+
+
+def tr(key: str, *args, **kwargs) -> RTextBase:
+    from mirror_archive_manager import globals
+    return ServerInterface.si().rtr(globals.metadata.id + '.' + key, *args, **kwargs)

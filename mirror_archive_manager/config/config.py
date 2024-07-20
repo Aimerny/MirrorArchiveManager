@@ -4,12 +4,14 @@ from mcdreforged.api.all import Serializable
 from typing import List, Optional
 
 from mirror_archive_manager.config.mirror_server_config import MirrorServerConfig
+from mirror_archive_manager.config.perm_config import PermConfig
 
 
 class Config(Serializable):
     leader: bool = True
     # debug: bool = False
     mirrors: List[MirrorServerConfig] = [MirrorServerConfig()]
+    perms: PermConfig
 
     @classmethod
     @functools.lru_cache
