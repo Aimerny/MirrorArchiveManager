@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, List
 
 from mcdreforged.api.all import *
 
@@ -30,14 +30,58 @@ class CommandManager:
             reply_message(source, tr('help.stop_help', RText(f'!!mam stop <server_name>', RColor.gray)))
             reply_message(source, tr('help.sync_help', RText(f'!!mam sync <server_name> <id>', RColor.gray)))
             reply_message(source, tr('help.info_help', RText(f'!!mam info <server_name>', RColor.gray)))
+        elif what == 'start':
+            reply_message(source, tr('help.start_help', RText(f'!!mam start <server_name>', RColor.gray)))
+        elif what == 'stop':
+            reply_message(source, tr('help.stop_help', RText(f'!!mam stop <server_name>', RColor.gray)))
+        elif what == 'sync':
+            reply_message(source, tr('help.sync_help', RText(f'!!mam sync <server_name> <id>', RColor.gray)))
+        elif what == 'info':
+            reply_message(source, tr('help.info_help', RText(f'!!mam info <server_name>', RColor.gray)))
         reply_message(source, tr('help.help_footer'))
+
+    def cmd_start(self, source: CommandSource, context: dict):
+        pass
+
+    def cmd_stop(self, source: CommandSource, context: dict):
+        pass
+
+    def cmd_sync(self, source: CommandSource, context: dict):
+        pass
+
+    def cmd_info(self, source: CommandSource, context: dict):
+        pass
+
+    def _suggest_mirror_server(self) -> List[str]:
+        # todo parse from config
+        mirrors = self.config.mirrors
+        if mirrors is not None:
+            return [mirror.name for mirror in mirrors]
+        else:
+            return []
 
     def register_commands(self):
         builder = SimpleCommandBuilder()
+        # help command
         builder.command('help', self.cmd_help)
         builder.command('help <what>', self.cmd_help)
         builder.arg('what', Text).suggests(lambda: COMMAND_HELP_LIST)
-        self.server.logger.info(f'disable={disable}')
+        # start command
+        builder.command('start', self.cmd_start)
+        builder.command('start <server>', self.cmd_start)
+        # stop command
+        builder.command('stop', self.cmd_stop)
+        builder.command('stop <server>', self.cmd_stop)
+        # sync command
+        builder.command('sync <id>', self.cmd_sync)
+        builder.command('sync <id> <server>', self.cmd_sync)
+        # info command
+        builder.command('info', self.cmd_info)
+        builder.command('info <server>', self.cmd_info)
+
+        builder.arg('server', Text).suggests(lambda: self._suggest_mirror_server())
+        builder.arg('id', Integer)
+
         root = (
             Literal('!!mam').
             requires(lambda: not disable, lambda: RText('mam has been disabled').set_color(RColor.red))
