@@ -8,4 +8,10 @@ mirror_archive_manager:
     help_header: '========== Mirror Archive Manager =========='
     help_footer: '================ by Aimerny ================'
   start:
-    no_mirror_found: 'not fount mirror server config'
+    start_failed: 'start server [{}] failed'
+    start_success: 'start server [{}] success'
+  stop:
+    stop_failed: 'stop server [{}] failed'
+    stop_success: 'start server [{}] success'
+  no_mirror_found: 'not fount mirror server config'
+  connection_error: 'connect server [{}] failed. Check MCDR has been started please:{}'

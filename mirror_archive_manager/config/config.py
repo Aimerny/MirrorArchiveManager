@@ -9,8 +9,8 @@ from mirror_archive_manager.config.perm_config import PermConfig
 
 class Config(Serializable):
     main: bool = True
-    # debug: bool = False
     mirrors: List[MirrorServerConfig] = [MirrorServerConfig()]
+    port: int = 30075
     perms: PermConfig
 
     @classmethod

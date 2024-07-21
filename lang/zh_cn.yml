@@ -8,4 +8,10 @@ mirror_archive_manager:
     help_header: '========== Mirror Archive Manager =========='
     help_footer: '================ by Aimerny ================'
   start:
-    no_mirror_found: '未找到已配置的mirror服务器'
+    start_failed: '启动服务器[{}]失败'
+    start_success: '启动服务器[{}]成功'
+  stop:
+    stop_failed: '停止服务器[{}]失败'
+    stop_success: '停止服务器[{}]成功'
+  no_mirror_found: '未找到已配置的镜像服务器'
+  connection_error: '连接服务器[{}]失败,请确认MCDR是否启动:{}'

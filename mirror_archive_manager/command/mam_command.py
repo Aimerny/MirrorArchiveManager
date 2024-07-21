@@ -3,6 +3,7 @@ from typing import Optional, List
 from mcdreforged.api.all import *
 
 from mirror_archive_manager.config.config import Config
+from mirror_archive_manager.config.mirror_server_config import MirrorServerConfig
 from mirror_archive_manager.manage.main_processor import MainProcessor
 from mirror_archive_manager.util.mcdr_util import reply_message, tr
 from mirror_archive_manager.globals import disable
@@ -43,19 +44,16 @@ class CommandManager:
         reply_message(source, tr('help.help_footer'))
 
     def cmd_start(self, source: CommandSource, context: dict):
-        mirror_name = context.get('server')
-        if len(self.config.mirrors) == 0:
-            reply_message(source, tr('start.no_mirror_found'))
+        mirror_config = self.__parse_mirror_config(source, context)
+        if mirror_config is None:
             return
-        mirror_config_map = {conf.name: conf for conf in self.config.mirrors}
-        if mirror_name is None:
-            mirror_config = self.config.mirrors[0]
-        else:
-            mirror_config = mirror_config_map.get(mirror_name)
-        self.processor.start_mirror(mirror_config)
+        self.processor.start_mirror(source, mirror_config)
 
     def cmd_stop(self, source: CommandSource, context: dict):
-        pass
+        mirror_config = self.__parse_mirror_config(source, context)
+        if mirror_config is None:
+            return
+        self.processor.stop_mirror(source, mirror_config)
 
     def cmd_sync(self, source: CommandSource, context: dict):
         pass
@@ -63,13 +61,27 @@ class CommandManager:
     def cmd_info(self, source: CommandSource, context: dict):
         pass
 
-    def _suggest_mirror_server(self) -> List[str]:
-        # todo parse from config
+    def __suggest_mirror_server(self) -> List[str]:
         mirrors = self.config.mirrors
         if mirrors is not None:
             return [mirror.name for mirror in mirrors]
         else:
             return []
+
+    def __parse_mirror_config(self, source: CommandSource, context: dict) -> MirrorServerConfig | None:
+        mirror_name = context.get('server')
+        if len(self.config.mirrors) == 0:
+            reply_message(source, tr('no_mirror_found').set_color(RColor.dark_red))
+            return None
+        mirror_config_map = {conf.name: conf for conf in self.config.mirrors}
+        if mirror_name is None:
+            mirror_config = self.config.mirrors[0]
+        else:
+            mirror_config = mirror_config_map.get(mirror_name)
+            if mirror_config is None:
+                reply_message(source, tr('no_mirror_found').set_color(RColor.dark_red))
+                return None
+        return mirror_config
 
     def register_commands(self):
         builder = SimpleCommandBuilder()
@@ -90,7 +102,7 @@ class CommandManager:
         builder.command('info', self.cmd_info)
         builder.command('info <server>', self.cmd_info)
 
-        builder.arg('server', Text).suggests(lambda: self._suggest_mirror_server())
+        builder.arg('server', Text).suggests(lambda: self.__suggest_mirror_server())
         builder.arg('id', Integer)
 
         root = (
