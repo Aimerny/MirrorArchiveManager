@@ -7,3 +7,5 @@ mirror_archive_manager:
     info_help: '{} -- 获取镜像服<server_name>的简单信息'
     help_header: '========== Mirror Archive Manager =========='
     help_footer: '================ by Aimerny ================'
+  start:
+    no_mirror_found: '未找到已配置的mirror服务器'

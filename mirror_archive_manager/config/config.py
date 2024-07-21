@@ -8,7 +8,7 @@ from mirror_archive_manager.config.perm_config import PermConfig
 
 
 class Config(Serializable):
-    leader: bool = True
+    main: bool = True
     # debug: bool = False
     mirrors: List[MirrorServerConfig] = [MirrorServerConfig()]
     perms: PermConfig

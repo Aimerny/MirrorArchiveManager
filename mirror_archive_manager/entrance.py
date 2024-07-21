@@ -4,6 +4,8 @@ from typing import Optional
 from mirror_archive_manager.config.config import Config, set_config_instance
 from mirror_archive_manager import globals
 from mirror_archive_manager.command.mam_command import CommandManager
+from mirror_archive_manager.manage.main_processor import MainProcessor
+from mirror_archive_manager.manage.mirror_processor import MirrorProcessor
 
 config: Optional[Config] = None
 _has_loaded = False
@@ -11,8 +13,8 @@ _has_loaded = False
 globals.load()
 
 
-def is_leader() -> bool:
-    return config.leader
+def is_main() -> bool:
+    return config.main
 
 
 def on_load(server: PluginServerInterface, old):
@@ -20,7 +22,7 @@ def on_load(server: PluginServerInterface, old):
     try:
         config = server.load_config_simple(target_class=Config, failure_policy='raise')
         set_config_instance(config)
-        if is_leader():
+        if is_main():
             server.logger.info(f'MAM running with main role!')
             start_main(server)
         else:
@@ -46,8 +48,11 @@ def start_main(server: PluginServerInterface):
         server.logger.warning('mirror server not found! MAM has been disabled!')
         globals.disable = True
     # register commands
-    CommandManager(server).register_commands()
+    main_processor = MainProcessor(server, config)
+    command_manager = CommandManager(server, main_processor)
+    command_manager.register_commands()
 
 
 def start_mirror(server: PluginServerInterface):
+    MirrorProcessor(server, config)
     server.logger.info('mirror process...')

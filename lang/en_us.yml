@@ -7,3 +7,5 @@ mirror_archive_manager:
     info_help: '{} -- get mirror server <server_name> simple info'
     help_header: '========== Mirror Archive Manager =========='
     help_footer: '================ by Aimerny ================'
+  start:
+    no_mirror_found: 'not fount mirror server config'

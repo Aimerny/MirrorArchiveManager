@@ -3,6 +3,7 @@ from typing import Optional, List
 from mcdreforged.api.all import *
 
 from mirror_archive_manager.config.config import Config
+from mirror_archive_manager.manage.main_processor import MainProcessor
 from mirror_archive_manager.util.mcdr_util import reply_message, tr
 from mirror_archive_manager.globals import disable
 
@@ -10,9 +11,10 @@ COMMAND_HELP_LIST = ['start', 'stop', 'sync', 'info']
 
 
 class CommandManager:
-    def __init__(self, server: PluginServerInterface):
+    def __init__(self, server: PluginServerInterface, processor: MainProcessor):
         self.server = server
         self.config = Config.get()
+        self.processor = processor
 
     def cmd_help(self, source: CommandSource, context: dict):
         what = context.get('what')
@@ -41,7 +43,16 @@ class CommandManager:
         reply_message(source, tr('help.help_footer'))
 
     def cmd_start(self, source: CommandSource, context: dict):
-        pass
+        mirror_name = context.get('server')
+        if len(self.config.mirrors) == 0:
+            reply_message(source, tr('start.no_mirror_found'))
+            return
+        mirror_config_map = {conf.name: conf for conf in self.config.mirrors}
+        if mirror_name is None:
+            mirror_config = self.config.mirrors[0]
+        else:
+            mirror_config = mirror_config_map.get(mirror_name)
+        self.processor.start_mirror(mirror_config)
 
     def cmd_stop(self, source: CommandSource, context: dict):
         pass
