@@ -6,9 +6,11 @@ from mirror_archive_manager import globals
 from mirror_archive_manager.command.mam_command import CommandManager
 from mirror_archive_manager.manage.main_processor import MainProcessor
 from mirror_archive_manager.manage.mirror_processor import MirrorProcessor
+from mirror_archive_manager.manage.processor import Processor
 
 config: Optional[Config] = None
 _has_loaded = False
+processor: Processor
 
 globals.load()
 
@@ -40,19 +42,23 @@ def on_load(server: PluginServerInterface, old):
 
 
 def on_unload(server: PluginServerInterface):
+    processor.stop()
     server.logger.warning(f'{server.get_self_metadata().name} unloaded!')
 
 
 def start_main(server: PluginServerInterface):
+    global processor
     if len(config.mirrors) == 0:
         server.logger.warning('mirror server not found! MAM has been disabled!')
         globals.disable = True
     # register commands
-    main_processor = MainProcessor(server, config)
-    command_manager = CommandManager(server, main_processor)
+    processor = MainProcessor(server, config)
+    command_manager = CommandManager(server, processor)
     command_manager.register_commands()
 
 
 def start_mirror(server: PluginServerInterface):
-    MirrorProcessor(server, config)
+    global processor
+    processor = MirrorProcessor(server, config)
+    processor.start()
     server.logger.info('mirror process...')

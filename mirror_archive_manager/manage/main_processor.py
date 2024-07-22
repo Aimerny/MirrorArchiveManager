@@ -30,6 +30,12 @@ class MainProcessor(Processor):
         self.config = config
         self.__logger = server.logger
 
+    def start(self):
+        pass
+
+    def stop(self):
+        pass
+
     def start_mirror(self, source: CommandSource, *args):
         mirror = args[0]
         self.__logger.debug(f'starting mirror: {mirror.name}')
@@ -63,7 +69,7 @@ class MainProcessor(Processor):
     def __request_mirror(self, source: CommandSource, mirror: MirrorServerConfig, op_type: OperateType) -> bool:
         try:
             url = f'http://{mirror.host}:{mirror.port}/{op_type}'
-            resp = requests.post(url=url)
+            resp = requests.post(url=url, timeout=3)
             return resp.status_code == 200
         except Exception as e:
             reply_message(source,
