@@ -163,3 +163,4 @@ cython_debug/
 
 # ma
 prime_backup
+sync_plugin.sh

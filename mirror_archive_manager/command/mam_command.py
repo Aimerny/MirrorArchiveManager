@@ -38,7 +38,7 @@ class CommandManager:
         elif what == 'stop':
             reply_message(source, tr('help.stop_help', RText(f'!!mam stop <server_name>', RColor.gray)))
         elif what == 'sync':
-            reply_message(source, tr('help.sync_help', RText(f'!!mam sync <server_name> <id>', RColor.gray)))
+            reply_message(source, tr('help.sync_help', RText(f'!!mam sync <server_name> <backup_id>', RColor.gray)))
         elif what == 'info':
             reply_message(source, tr('help.info_help', RText(f'!!mam info <server_name>', RColor.gray)))
         reply_message(source, tr('help.help_footer'))
@@ -56,7 +56,13 @@ class CommandManager:
         self.processor.stop_mirror(source, mirror_config)
 
     def cmd_sync(self, source: CommandSource, context: dict):
-        pass
+        mirror_config = self.__parse_mirror_config(source, context)
+        if mirror_config is None:
+            return
+        backup_id = context.get('backup_id')
+        if backup_id is None:
+            reply_message(source, tr('no_backup_id_found').set_color(RColor.dark_red))
+        self.processor.sync_mirror(source, backup_id,  mirror_config)
 
     def cmd_info(self, source: CommandSource, context: dict):
         pass
@@ -96,14 +102,14 @@ class CommandManager:
         builder.command('stop', self.cmd_stop)
         builder.command('stop <server>', self.cmd_stop)
         # sync command
-        builder.command('sync <id>', self.cmd_sync)
-        builder.command('sync <id> <server>', self.cmd_sync)
+        builder.command('sync <backup_id>', self.cmd_sync)
+        builder.command('sync <backup_id> <server>', self.cmd_sync)
         # info command
         builder.command('info', self.cmd_info)
         builder.command('info <server>', self.cmd_info)
 
         builder.arg('server', Text).suggests(lambda: self.__suggest_mirror_server())
-        builder.arg('id', Integer)
+        builder.arg('backup_id', Integer)
 
         root = (
             Literal('!!mam').

@@ -10,6 +10,7 @@ from mirror_archive_manager.config.perm_config import PermConfig
 class Config(Serializable):
     main: bool = True
     mirrors: List[MirrorServerConfig] = [MirrorServerConfig()]
+    main_path: str = '../main-server'
     port: int = 30075
     perms: PermConfig
 

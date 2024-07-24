@@ -13,5 +13,9 @@ mirror_archive_manager:
   stop:
     stop_failed: '停止服务器[{}]失败'
     stop_success: '停止服务器[{}]成功'
+  sync:
+    sync_failed: '同步存档[#{}]到镜像服[{}]失败'
+    sync_success: '同步存档[#{}]到镜像服[{}]成功'
   no_mirror_found: '未找到已配置的镜像服务器'
+  no_backup_id_found: '请输入待同步的备份id'
   connection_error: '连接服务器[{}]失败,请确认MCDR是否启动:{}'

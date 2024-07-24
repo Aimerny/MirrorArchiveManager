@@ -13,5 +13,9 @@ mirror_archive_manager:
   stop:
     stop_failed: 'stop server [{}] failed'
     stop_success: 'start server [{}] success'
+  sync:
+    sync_failed: '同步存档id[]到镜像服[]失败'
+    sync_success: '同步存档id[]到镜像服[]成功'
   no_mirror_found: 'not fount mirror server config'
+  no_backup_id_found: 'input archive prime backup id please'
   connection_error: 'connect server [{}] failed. Check MCDR has been started please:{}'
