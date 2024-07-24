@@ -44,18 +44,27 @@ class CommandManager:
         reply_message(source, tr('help.help_footer'))
 
     def cmd_start(self, source: CommandSource, context: dict):
+        if source.get_permission_level() < self.config.perms.start:
+            reply_message(source, tr('perm_denied').set_color(RColor.red))
+            return
         mirror_config = self.__parse_mirror_config(source, context)
         if mirror_config is None:
             return
         self.processor.start_mirror(source, mirror_config)
 
     def cmd_stop(self, source: CommandSource, context: dict):
+        if source.get_permission_level() < self.config.perms.stop:
+            reply_message(source, tr('perm_denied').set_color(RColor.red))
+            return
         mirror_config = self.__parse_mirror_config(source, context)
         if mirror_config is None:
             return
         self.processor.stop_mirror(source, mirror_config)
 
     def cmd_sync(self, source: CommandSource, context: dict):
+        if source.get_permission_level() < self.config.perms.sync:
+            reply_message(source, tr('perm_denied').set_color(RColor.red))
+            return
         mirror_config = self.__parse_mirror_config(source, context)
         if mirror_config is None:
             return

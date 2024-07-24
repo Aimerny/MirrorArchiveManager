@@ -19,3 +19,4 @@ mirror_archive_manager:
   no_mirror_found: '未找到已配置的镜像服务器'
   no_backup_id_found: '请输入待同步的备份id'
   connection_error: '连接服务器[{}]失败,请确认MCDR是否启动:{}'
+  perm_denied: '你没有权限执行该指令'

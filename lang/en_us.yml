@@ -19,3 +19,4 @@ mirror_archive_manager:
   no_mirror_found: 'not fount mirror server config'
   no_backup_id_found: 'input archive prime backup id please'
   connection_error: 'connect server [{}] failed. Check MCDR has been started please:{}'
+  perm_denied: 'permission denied'

@@ -12,7 +12,7 @@ class Config(Serializable):
     mirrors: List[MirrorServerConfig] = [MirrorServerConfig()]
     main_path: str = '../main-server'
     port: int = 30075
-    perms: PermConfig
+    perms: PermConfig = PermConfig()
 
     @classmethod
     @functools.lru_cache
