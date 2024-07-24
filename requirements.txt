@@ -1,2 +1,3 @@
+mcdreforged
 requests>=2.31.0
 fastapi>=0.111.1
