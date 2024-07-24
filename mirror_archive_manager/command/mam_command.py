@@ -32,15 +32,15 @@ class CommandManager:
             reply_message(source, tr('help.start_help', RText(f'!!mam start <server_name>', RColor.gray)))
             reply_message(source, tr('help.stop_help', RText(f'!!mam stop <server_name>', RColor.gray)))
             reply_message(source, tr('help.sync_help', RText(f'!!mam sync <server_name> <id>', RColor.gray)))
-            reply_message(source, tr('help.info_help', RText(f'!!mam info <server_name>', RColor.gray)))
+            # reply_message(source, tr('help.info_help', RText(f'!!mam info <server_name>', RColor.gray)))
         elif what == 'start':
             reply_message(source, tr('help.start_help', RText(f'!!mam start <server_name>', RColor.gray)))
         elif what == 'stop':
             reply_message(source, tr('help.stop_help', RText(f'!!mam stop <server_name>', RColor.gray)))
         elif what == 'sync':
             reply_message(source, tr('help.sync_help', RText(f'!!mam sync <server_name> <backup_id>', RColor.gray)))
-        elif what == 'info':
-            reply_message(source, tr('help.info_help', RText(f'!!mam info <server_name>', RColor.gray)))
+        # elif what == 'info':
+        #     reply_message(source, tr('help.info_help', RText(f'!!mam info <server_name>', RColor.gray)))
         reply_message(source, tr('help.help_footer'))
 
     def cmd_start(self, source: CommandSource, context: dict):
@@ -62,7 +62,7 @@ class CommandManager:
         backup_id = context.get('backup_id')
         if backup_id is None:
             reply_message(source, tr('no_backup_id_found').set_color(RColor.dark_red))
-        self.processor.sync_mirror(source, backup_id,  mirror_config)
+        self.processor.sync_mirror(source, backup_id, mirror_config)
 
     def cmd_info(self, source: CommandSource, context: dict):
         pass
@@ -105,8 +105,8 @@ class CommandManager:
         builder.command('sync <backup_id>', self.cmd_sync)
         builder.command('sync <backup_id> <server>', self.cmd_sync)
         # info command
-        builder.command('info', self.cmd_info)
-        builder.command('info <server>', self.cmd_info)
+        # builder.command('info', self.cmd_info)
+        # builder.command('info <server>', self.cmd_info)
 
         builder.arg('server', Text).suggests(lambda: self.__suggest_mirror_server())
         builder.arg('backup_id', Integer)

@@ -29,7 +29,6 @@ class TransferArchiveTask(HeavyTask[None]):
     def run(self) -> None:
         from prime_backup.action.get_backup_action import GetBackupAction
         from prime_backup.mcdr.text_components import TextComponents
-        from pathlib import Path
 
         backup = GetBackupAction(self.backup_id).run()
         name = f'backup_{backup.id}'

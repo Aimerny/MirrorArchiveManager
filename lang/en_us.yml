@@ -4,7 +4,7 @@ mirror_archive_manager:
     start_help: '{} -- start mirror server <server_name>'
     stop_help: '{} -- stop mirror server <server_name>'
     sync_help: '{} -- sync prime backup archive [<id>] to mirror <server_name>'
-    info_help: '{} -- get mirror server <server_name> simple info'
+    # info_help: '{} -- get mirror server <server_name> simple info'
     help_header: '========== Mirror Archive Manager =========='
     help_footer: '================ by Aimerny ================'
   start:
@@ -14,8 +14,8 @@ mirror_archive_manager:
     stop_failed: 'stop server [{}] failed'
     stop_success: 'start server [{}] success'
   sync:
-    sync_failed: '同步存档id[]到镜像服[]失败'
-    sync_success: '同步存档id[]到镜像服[]成功'
+    sync_failed: 'sync backup id [{}] to mirror server [{}] failed'
+    sync_success: 'sync backup id [{}] to mirror server [{}] success'
   no_mirror_found: 'not fount mirror server config'
   no_backup_id_found: 'input archive prime backup id please'
   connection_error: 'connect server [{}] failed. Check MCDR has been started please:{}'
